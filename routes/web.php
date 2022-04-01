@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\JobController;
 use Illuminate\Support\Facades\Route;
 
@@ -18,10 +19,14 @@ Route::get('/', function () {
     return ['Laravel' => app()->version()];
 });
 
-Route::get('jobs', [JobController::class, 'index']);
-Route::get('jobs/{job}', [JobController::class, 'show']);
+Route::prefix('jobs')->controller(JobController::class)->group(function () {
+    Route::get('/', 'index');
+    Route::get('/{job:slug}', 'show');
+    Route::post('/{job:slug}/apply', [ApplicationController::class, 'create'])->middleware('auth:sanctum');
+});
 
-Route::middleware('auth:sanctum')->prefix('auth')->group(function (){
-    Route::get('me',[\App\Http\Controllers\Auth\UserController::class,'me']);
+Route::prefix('applications')->controller(ApplicationController::class)->middleware('auth:sanctum')->group(function () {
+    Route::get('/', 'index');
+    Route::get('/{application}', 'show');
 });
 require __DIR__ . '/auth.php';

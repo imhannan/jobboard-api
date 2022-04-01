@@ -35,3 +35,7 @@ Route::post('/email/verification-notification', [EmailVerificationNotificationCo
 Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
                 ->middleware('auth:sanctum')
                 ->name('logout');
+
+Route::middleware('auth:sanctum')->prefix('auth')->group(function (){
+    Route::get('me',[\App\Http\Controllers\Auth\UserController::class,'me']);
+});

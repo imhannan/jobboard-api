@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('title');
             $table->string('slug');
             $table->string('location');
+            $table->integer('salary')->default(20);
             $table->string('link');
             $table->longText('desc');
             $table->boolean('pinned')->default(false);
